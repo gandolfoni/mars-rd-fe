@@ -3,12 +3,12 @@ import { ColumnDef } from '@tanstack/react-table'
 import Table from 'components/common/Table'
 import useAssets from 'hooks/assets/useAssets'
 import useLiquidations from 'hooks/liquidations/useLiquidations'
-import Asset from 'components/main/liquidations/Table/Cell/Asset'
-import Account from 'components/main/liquidations/Table/Cell/Account'
-import LiquidationPrice from 'components/main/liquidations/Table/Cell/LiquidationPrice'
+import Asset from 'components/main/Liquidations/Table/Cell/Asset'
+import Account from 'components/main/Liquidations/Table/Cell/Account'
+import LiquidationPrice from 'components/main/Liquidations/Table/Cell/LiquidationPrice'
 import { CircularProgress } from 'components/common/CircularProgress'
 import Text from 'components/common/Text'
-import Pagination from 'components/main/liquidations/Table/Pagination'
+import Pagination from 'components/main/Liquidations/Table/Pagination'
 
 export default function LiquidationsTable() {
   const [page, setPage] = useState<number>(1)

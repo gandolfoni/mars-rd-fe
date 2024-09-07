@@ -1,5 +1,5 @@
-import LiquidationsMetrics from 'components/main/liquidations/LiquidationsMetrics'
-import LiquidationsTable from 'components/main/liquidations/Table/LiquidationsTable'
+import LiquidationsMetrics from 'components/main/Liquidations/Table/LiquidationsMetrics'
+import LiquidationsTable from 'components/main/Liquidations/Table/LiquidationsTable'
 import useChainConfig from 'hooks/chain/useChainConfig'
 import Text from 'components/common/Text'
 import { ChainInfoID } from 'types/enums'
