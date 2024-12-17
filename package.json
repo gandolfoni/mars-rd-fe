@@ -2,7 +2,6 @@
   "name": "mars-risk-dashboard",
   "version": "1.0.0",
   "homepage": "./",
-  "private": false,
   "license": "SEE LICENSE IN LICENSE FILE",
   "scripts": {
     "build": "next build",
@@ -24,6 +23,7 @@
     "@tailwindcss/container-queries": "^0.1.1",
     "@tanstack/react-table": "^8.20.5",
     "@tippyjs/react": "^4.2.6",
+    "@vercel/speed-insights": "^1.1.0",
     "bignumber.js": "^9.1.2",
     "classnames": "^2.5.1",
     "debounce-promise": "^3.1.2",
