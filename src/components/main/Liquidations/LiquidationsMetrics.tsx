@@ -10,7 +10,7 @@ export default function LiquidationsMetrics() {
 
   const liquidationMetrics: Metric[] = [
     {
-      value: BN(liquidityOverviewData?.bad_debt || 0),
+      value: BN(liquidityOverviewData?.bad_debt || 0).shiftedBy(-PRICE_ORACLE_DECIMALS),
       label: 'Bad Debt',
       isCurrency: true,
       formatOptions: {

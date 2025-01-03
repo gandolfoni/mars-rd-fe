@@ -38,6 +38,19 @@ export default function PerpsMetrics() {
       showSignPrefix: true,
     },
     {
+      value: BN(perpsStats?.funding_and_pnl.unrealized_pnl[0]?.value || 0).shiftedBy(
+        -PRICE_ORACLE_DECIMALS,
+      ),
+      label: 'Total Unrealized PnL',
+      isCurrency: true,
+      formatOptions: {
+        maxDecimals: 2,
+        minDecimals: 0,
+        abbreviated: true,
+      },
+      showSignPrefix: true,
+    },
+    {
       value: BN(perpsStats?.fees.trading_fee[0]?.value || 0).shiftedBy(-PRICE_ORACLE_DECIMALS),
       label: 'Total Trading Fees',
       isCurrency: true,

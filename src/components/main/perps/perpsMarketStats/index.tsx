@@ -225,6 +225,12 @@ export default function PerpsMarketStats(props: Props) {
               lines={PERPS_CHART_CONFIGS.vault}
               height='h-80'
               title='Vault'
+              customYAxisDomain={(values) => {
+                const max = Math.max(...values)
+                const min = Math.min(...values)
+                const padding = (max - min) * 0.1 // 10% padding
+                return [min - padding, max + padding]
+              }}
             />
           </div>
           <div className='w-full md:w-1/2'>

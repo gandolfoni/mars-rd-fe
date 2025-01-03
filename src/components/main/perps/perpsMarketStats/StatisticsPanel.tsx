@@ -43,7 +43,7 @@ export default function StatisticsPanel(props: Props) {
       value: getLatestValue(data.daily_trading_volume),
       label: 'Daily Trading Volume',
       isCurrency: true,
-      formatOptions: { maxDecimals: 4, minDecimals: 2, abbreviated: true },
+      formatOptions: { maxDecimals: 2, minDecimals: 2, abbreviated: true },
     },
     {
       value: getLatestValue(data.open_interest.total || []),

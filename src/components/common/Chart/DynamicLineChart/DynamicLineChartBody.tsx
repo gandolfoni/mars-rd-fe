@@ -30,6 +30,7 @@ interface Props {
   data: MergedChartData[]
   lines: LineConfig[]
   height?: string
+  customYAxisDomain?: (values: number[]) => [number, number]
 }
 
 const TooltipContent = ({
@@ -75,29 +76,34 @@ const TooltipContent = ({
 }
 
 export default function DynamicLineChartBody(props: Props) {
-  const { data, lines, height = 'h-65' } = props
+  const { data, lines, height = 'h-65', customYAxisDomain } = props
   const [reduceMotion] = useLocalStorage<boolean>(
     LocalStorageKeys.REDUCE_MOTION,
     DEFAULT_SETTINGS.reduceMotion,
   )
   const reversedData = [...data].reverse()
 
-  // domain setting for large percentage values
+  // domain setting for large percentage values and custom domains
   const getYAxisDomain = () => {
+    const extractValues = () =>
+      reversedData
+        .map((item) =>
+          lines.map((line) => {
+            const value = item[line.dataKey]
+            return typeof value === 'string' ? parseFloat(value) : (value as number)
+          }),
+        )
+        .flat()
+
+    // if customYAxisDomain is a function
+    if (typeof customYAxisDomain === 'function') {
+      return customYAxisDomain(extractValues())
+    }
+
+    // Default percentage handling
     if (!lines[0]?.isPercentage) return undefined
 
-    const values = reversedData
-      .map((item) =>
-        lines.map((line) => {
-          const value = item[line.dataKey]
-          if (typeof value === 'string') {
-            return parseFloat(value)
-          }
-          return typeof value === 'number' ? value : 0
-        }),
-      )
-      .flat()
-
+    const values = extractValues()
     const maxValue = Math.max(...values)
     const minValue = Math.min(...values)
 
@@ -107,7 +113,7 @@ export default function DynamicLineChartBody(props: Props) {
   }
 
   return (
-    <div className={classNames('-ml-6', height)}>
+    <div className={classNames('-ml-4', height)}>
       <ResponsiveContainer width='100%' height='100%'>
         <AreaChart
           data={reversedData}

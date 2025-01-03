@@ -129,6 +129,7 @@ interface AssetMetaData {
   isStable?: boolean
   isStaking?: boolean
   isPerpsEnabled?: boolean
+  isDeprecated?: boolean
   logo?: string | null
   prefix?: string
   pythPriceFeedId?: string
@@ -362,7 +363,7 @@ interface PythUpdateExecuteMsg {
   update_price_feeds: { data: string[] }
 }
 
-type Page = 'main' | 'liquidations' | 'perps'
+type Page = 'main' | 'liquidations' | 'perps' | 'perps/{asset}'
 
 type OsmosisRouteResponse = {
   amount_in: {
@@ -1467,7 +1468,9 @@ interface LiquidationDataItem {
   liquidatee_account_id: string
   collateral_asset_won?: BNCoin
   debt_asset_repaid?: BNCoin
+  price_debt_repaid?: string
   protocol_fee_coin?: BNCoin
+  price_protocol_fee_coin?: string
   price_liquidated?: string
   timestamp: string
   tx_hash: string

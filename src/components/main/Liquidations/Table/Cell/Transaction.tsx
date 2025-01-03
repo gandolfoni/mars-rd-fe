@@ -1,9 +1,9 @@
-import Button from 'components/common/Button'
 import Text from 'components/common/Text'
-import useClipboard from 'react-use-clipboard'
-import { Chain, Check } from 'components/common/Icons'
-import { Tooltip } from 'components/common/Tooltip'
+import { ExternalLink } from 'components/common/Icons'
 import { truncate } from 'utils/formatters'
+import { getCurrentChainId } from 'utils/getCurrentChainId'
+import { ChainInfoID } from 'types/enums'
+import { TextLink } from 'components/common/TextLink'
 
 interface Props {
   value: string
@@ -12,26 +12,24 @@ interface Props {
 export default function Transaction(props: Props) {
   const { value } = props
 
-  const [isCopied, setCopied] = useClipboard(value, {
-    successDuration: 1000 * 5,
-  })
+  const chainId = getCurrentChainId()
+
+  const url =
+    chainId === ChainInfoID.Osmosis1
+      ? `https://www.mintscan.io/osmosis/txs/${value}`
+      : `https://www.mintscan.io/neutron/txs/${value}`
 
   return (
-    <div className='flex items-center justify-end gap-2'>
+    <div
+      className='flex items-center justify-end gap-2'
+      onClick={(e) => {
+        e.stopPropagation()
+      }}
+    >
       <Text size='sm'> {truncate(value, [5, 5])}</Text>
-      <Tooltip
-        type='info'
-        content={<Text size='2xs'>{isCopied ? 'Hash copied!' : 'Copy Hash'}</Text>}
-      >
-        <Button
-          color='quaternary'
-          variant='transparent'
-          iconClassName='w-3.5 h-3.5'
-          className='!px-2'
-          leftIcon={isCopied ? <Check /> : <Chain />}
-          onClick={setCopied}
-        />
-      </Tooltip>
+      <TextLink href={url} target='_blank' title={`View transaction ${value} on Mintscan`}>
+        <ExternalLink className='w-3.5 h-3.5 text-white/40 hover:text-inherit hover:cursor-pointer' />
+      </TextLink>
     </div>
   )
 }

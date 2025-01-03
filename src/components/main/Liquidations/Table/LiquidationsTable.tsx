@@ -8,7 +8,6 @@ import Timestamp from 'components/main/Liquidations/Table/Cell/Timestamp'
 import Transaction from 'components/main/Liquidations/Table/Cell/Transaction'
 import useAssets from 'hooks/assets/useAssets'
 import useLiquidations from 'hooks/liquidations/useLiquidations'
-import { BN_ZERO } from 'constants/math'
 import { CircularProgress } from 'components/common/CircularProgress'
 import { ColumnDef, Row } from '@tanstack/react-table'
 import { useEffect, useMemo, useState } from 'react'
@@ -22,7 +21,6 @@ export default function LiquidationsTable() {
 
   const { data: liquidityData, isLoading: isLiquidityDataLoading } = useLiquidations(page, pageSize)
   const { data: assetsData } = useAssets()
-
   const totalPages = Math.ceil(maxEntries / pageSize)
 
   useEffect(() => {
@@ -38,12 +36,6 @@ export default function LiquidationsTable() {
   const isLoading = isLiquidityDataLoading || !liquidityData
 
   const columns = useMemo<ColumnDef<LiquidationDataItem>[]>(() => {
-    const hasNonZeroDebt =
-      liquidityData?.some(
-        (item: LiquidationDataItem) =>
-          item.debt_asset_repaid?.amount && item.debt_asset_repaid.amount !== BN_ZERO,
-      ) ?? false
-
     const baseColumns = [
       {
         header: 'Time',
@@ -66,28 +58,35 @@ export default function LiquidationsTable() {
           )
         },
       },
-      ...(!hasNonZeroDebt
-        ? [
-            {
-              header: 'Repaid Debt',
-              cell: ({ row }: { row: Row<LiquidationDataItem> }) => {
-                return (
-                  <Asset value={row.original.debt_asset_repaid as BNCoin} assetData={assetsData} />
-                )
-              },
-            },
-          ]
-        : []),
       {
         header: 'Liquidation Price',
         cell: ({ row }: { row: Row<LiquidationDataItem> }) => {
           return <LiquidationPrice value={row.original ?? 'N/A'} />
         },
       },
+
+      {
+        header: 'Repaid Debt',
+        cell: ({ row }: { row: Row<LiquidationDataItem> }) => {
+          return (
+            <Asset
+              value={row.original.debt_asset_repaid as BNCoin}
+              assetData={assetsData}
+              historicalPrice={row.original.price_debt_repaid}
+            />
+          )
+        },
+      },
       {
         header: 'Protocol Fee',
         cell: ({ row }: { row: Row<LiquidationDataItem> }) => {
-          return <Asset value={row.original.protocol_fee_coin as BNCoin} assetData={assetsData} />
+          return (
+            <Asset
+              value={row.original.protocol_fee_coin as BNCoin}
+              assetData={assetsData}
+              historicalPrice={row.original.price_protocol_fee_coin}
+            />
+          )
         },
       },
       {
@@ -98,7 +97,7 @@ export default function LiquidationsTable() {
       },
     ]
     return baseColumns
-  }, [assetsData, liquidityData])
+  }, [assetsData])
 
   if (isLoading) {
     return (
